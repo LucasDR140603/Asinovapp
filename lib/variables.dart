@@ -12,6 +12,7 @@ const Color black=Colors.black;
 const Color light=Color.fromARGB(255, 230, 224, 223);
 const Color white38=Colors.white38;
 const Color cyanAccent=Colors.cyanAccent;
+const Color transparent=Color.fromARGB(0,0,0,0);
 const String url='www.asinova.es';
 const String api='/webapi/api/';
 String getUrlApi(){

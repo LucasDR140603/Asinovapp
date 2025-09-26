@@ -397,12 +397,12 @@ class _MyWidgetState extends State<Registros> {
       actions: [
         //Text('${getTextoFecha2(inicio)} - ${getTextoFecha2(fin)}    '),
         duracion_actual=="Día"?
-        ElevatedButton(onPressed: (){setDia();},child:Text('${dias_semana[inicio.weekday-1]} ${getFechaTextoDia(getTextoFecha2(inicio))}'))
+        ElevatedButton(style: ButtonStyle(shadowColor: WidgetStatePropertyAll(transparent),backgroundColor: WidgetStatePropertyAll(transparent),padding: WidgetStatePropertyAll(EdgeInsets.zero)),onPressed: (){setDia();},child:Text('${dias_semana[inicio.weekday-1]} ${getFechaTextoDia(getTextoFecha2(inicio))}'))
         :duracion_actual=="Semana"?
-        ElevatedButton(onPressed:(){},child:Text('${getFechaTextoDia(getTextoFecha2(inicio))} - ${getFechaTextoDia(getTextoFecha2(fin))}'))
+        ElevatedButton(style: ButtonStyle(shadowColor: WidgetStatePropertyAll(transparent),backgroundColor: WidgetStatePropertyAll(transparent),padding: WidgetStatePropertyAll(EdgeInsets.zero)),onPressed:(){},child:Text('${getFechaTextoDia(getTextoFecha2(inicio))} - ${getFechaTextoDia(getTextoFecha2(fin))}'))
         :duracion_actual=="Mes"?
-        ElevatedButton(onPressed: (){},child:Text('${meses[inicio.month-1]} ${inicio.year}'))
-        :ElevatedButton(onPressed: (){},child:Text('${inicio.year}'))
+        ElevatedButton(style: ButtonStyle(shadowColor: WidgetStatePropertyAll(transparent),backgroundColor: WidgetStatePropertyAll(transparent),padding: WidgetStatePropertyAll(EdgeInsets.zero)),onPressed: (){},child:Text('${meses[inicio.month-1]} ${inicio.year}'))
+        :ElevatedButton(style: ButtonStyle(shadowColor: WidgetStatePropertyAll(transparent),backgroundColor: WidgetStatePropertyAll(transparent),padding: WidgetStatePropertyAll(EdgeInsets.zero)),onPressed: (){},child:Text('${inicio.year}'))
       ],),
       body: GestureDetector(
         onHorizontalDragEnd: (details)=>{
