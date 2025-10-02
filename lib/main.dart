@@ -33,6 +33,7 @@ class _MyWidgetState extends State<MyApp>{
   PageController controlador=PageController(initialPage: 0);
   String titulo_datos_usuario="Datos de Usuario";
   bool datos_usuario=false;
+  bool cerrando=false;
   void set({bool mantener=true})async{
     prefs=await SharedPreferences.getInstance();
     if (prefs.getString("id_usuario")!=null){
@@ -57,12 +58,15 @@ class _MyWidgetState extends State<MyApp>{
     });
   }
   void iniciar_sesion(dynamic x){
+    cerrando=false;
     log(x,mantener:false);
   }
   void registrar(dynamic x){
+    cerrando=false;
     log(x,mantener: false);
   }
   void log(dynamic x,{bool mantener=true}){
+    if (cerrando) return;
     setState((){
       usuario=x;
       if (!mantener){
@@ -72,16 +76,14 @@ class _MyWidgetState extends State<MyApp>{
     });
   }
   void logout()async{
-    datos_usuario=false;
-    index=0;
-    usuario=null;
-    filtrado="";
-    bool eliminado=await prefs.remove("id_usuario");
-    if (eliminado){
-      setState((){
-        
-      });
-    }
+    cerrando=true;
+    await prefs.remove("id_usuario");
+    setState(() {
+      index = 0;
+      datos_usuario = false;
+      filtrado = "";
+      usuario = null;
+    });
   }
   @override 
   void initState() {
@@ -135,8 +137,8 @@ class _MyWidgetState extends State<MyApp>{
                         setPagina(titulo_datos_usuario)
                       }
                       else if (value=='logout'){
-                        Future.delayed(Duration(milliseconds: 500),()=>{
-                          logout()
+                        Future.delayed(Duration(milliseconds: 500),(){
+                          logout();
                         }),
                       }
                     },
