@@ -28,14 +28,11 @@ class _MyWidgetState extends State<MyApp>{
   late SharedPreferences prefs;
   bool cargando=true;
   dynamic usuario=null;
-  List<Widget> paginas=[];
-  List<String> titulos=[];
   int index=0;
   String filtrado="";
   PageController controlador=PageController(initialPage: 0);
-  Widget pagina=Text("");
-  String titulo="";
   String titulo_datos_usuario="Datos de Usuario";
+  bool datos_usuario=false;
   void set({bool mantener=true})async{
     prefs=await SharedPreferences.getInstance();
     if (prefs.getString("id_usuario")!=null){
@@ -51,9 +48,9 @@ class _MyWidgetState extends State<MyApp>{
       }
     }
     else{
-      paginas=[Login(log: iniciar_sesion,),Register(log: registrar),];
-      titulos=["Iniciar Sesión","Registrar"];
-      titulo=titulos[0];
+      index=0;
+      datos_usuario=false;
+      usuario = null;
     }
     setState((){
       cargando=false;
@@ -67,27 +64,24 @@ class _MyWidgetState extends State<MyApp>{
   }
   void log(dynamic x,{bool mantener=true}){
     setState((){
+      usuario=x;
       if (!mantener){
         index=0;
       }
-      usuario=x;
       prefs.setString("id_usuario",x['id']);
-      paginas=[Registros(usuario: usuario,),Proyectos(usuario:usuario,filtrado: (s){setState((){filtrado=s;});},),Centros(filtrado: (s){setState((){filtrado=s;});},),Clientes(filtrado:(s){setState((){filtrado=s;});})];
-      titulos=["Registros","Proyectos","Centros","Clientes"];
-      if (!mantener){
-        pagina=paginas[0];
-        titulo=titulos[0];
-      }
     });
   }
-  void logout()async {
-    await prefs.remove("id_usuario");
+  void logout()async{
+    datos_usuario=false;
+    index=0;
     usuario=null;
-    setState((){
-      paginas=[Login(log: iniciar_sesion,),Register(log: registrar),];
-      titulos=["Iniciar Sesión","Registrar"];
-      titulo=titulos[0];
-    });
+    filtrado="";
+    bool eliminado=await prefs.remove("id_usuario");
+    if (eliminado){
+      setState((){
+        
+      });
+    }
   }
   @override 
   void initState() {
@@ -101,26 +95,23 @@ class _MyWidgetState extends State<MyApp>{
       key=UniqueKey();
     });
   }
-  void setPagina(String value){
-    setState((){
-      titulo=value;
-      if (value==titulo_datos_usuario){
-        pagina=DatosUsuario(usuario:usuario,log:log);
-      }
-      else{
-        index=titulos.indexOf(value);
-        pagina=paginas[index];
-      }
-      if(usuario==null){
-        controlador.jumpToPage(index);
-      }
-      else{
-        refrescar();
-      }
-    });
-  }
+  
   @override
   Widget build(BuildContext context) {
+    List<Widget> paginas=usuario==null?[Login(log: iniciar_sesion,),Register(log: registrar),]:[Registros(usuario: usuario,),Proyectos(usuario:usuario,filtrado: (s){setState((){filtrado=s;});},),Centros(filtrado: (s){setState((){filtrado=s;});},),Clientes(filtrado:(s){setState((){filtrado=s;});})];
+    List<String> titulos=usuario==null?["Iniciar Sesión","Registrar"]:["Registros","Proyectos","Centros","Clientes"];
+    void setPagina(String value){
+      setState((){
+        datos_usuario=value==titulo_datos_usuario;
+        index=datos_usuario?0:titulos.indexOf(value);
+        if(usuario==null){
+          controlador.jumpToPage(index);
+        }
+        else{
+          refrescar();
+        }
+      });
+    }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme,
@@ -129,7 +120,7 @@ class _MyWidgetState extends State<MyApp>{
             appBar: AppBar(
               toolbarHeight: 65,
               title: Stack(alignment: Alignment.centerLeft,children:[
-                Text(titulo,style: TextStyle(color:black,fontSize: 20),),
+                Text(datos_usuario?titulo_datos_usuario:titulos[index],style: TextStyle(color:black,fontSize: 20),),
                 Column(crossAxisAlignment: CrossAxisAlignment.start,mainAxisSize: MainAxisSize.min,children:[SizedBox(height: 40,),Text(filtrado,style: TextStyle(fontSize: 12,color: black),)])
                 ]
               ),
@@ -146,7 +137,7 @@ class _MyWidgetState extends State<MyApp>{
                       else if (value=='logout'){
                         Future.delayed(Duration(milliseconds: 500),()=>{
                           logout()
-                        })
+                        }),
                       }
                     },
                     itemBuilder: (context)=>[
@@ -159,9 +150,9 @@ class _MyWidgetState extends State<MyApp>{
             ),
             body: KeyedSubtree(
               key: key,
-              child:PopScope(canPop: index==0 && titulo!=titulo_datos_usuario,onPopInvokedWithResult: (b,d){setPagina(titulos[0]);},child: usuario==null?
-                PageView(onPageChanged: (value){setState((){index=value;titulo=titulos[value];});},controller: controlador,children:paginas)
-                :pagina)
+              child:PopScope(canPop: index==0 && !datos_usuario,onPopInvokedWithResult: (b,d){setPagina(titulos[0]);},child: usuario==null?
+                PageView(onPageChanged: (value){setState((){index=value;});},controller: controlador,children:paginas)
+                :datos_usuario?DatosUsuario(usuario:usuario,log: log,):paginas[index])
           )
         )
       ),
