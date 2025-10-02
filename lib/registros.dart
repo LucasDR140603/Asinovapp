@@ -347,8 +347,8 @@ class _MyWidgetState extends State<Registros> {
         content: column(List<Widget>.from(textos_duraciones.map((x)=>ListTile(title: Text(x),onTap: (){setState((){
           duracion_actual=x;
           DateTime actual=DateTime.now();
-          int inicio_dia=duracion_actual=="Día"?actual.day:duracion_actual=="Semana"?actual.day-(actual.weekday-1):1;
-          int fin_dia=duracion_actual=="Día"?actual.day:duracion_actual=="Semana"?actual.day+(7-actual.weekday):duracion_actual=="Mes"?getDiasMes(0):31;
+          int inicio_dia=duracion_actual=="Día"?actual.day:duracion_actual=="Semana"?actual.subtract(Duration(days: actual.weekday-1)).day:1;
+          int fin_dia=duracion_actual=="Día"?actual.day:duracion_actual=="Semana"?actual.add(Duration(days: 7-actual.weekday)).day:duracion_actual=="Mes"?getDiasMes(0):31;
           int inicio_mes=duracion_actual=="Año"?1:duracion_actual=="Semana" && actual.day<(actual.weekday)?actual.month-1:actual.month;
           int fin_mes=duracion_actual=="Año"?12:duracion_actual=="Semana" && actual.day+(7-actual.weekday)>getDiasMesDeterminado(actual.month)?actual.month+1:actual.month;
           int anho=actual.year;

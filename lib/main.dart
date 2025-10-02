@@ -80,15 +80,12 @@ class _MyWidgetState extends State<MyApp>{
       }
     });
   }
-  void logout(){
+  void logout()async {
+    await prefs.remove("id_usuario");
+    usuario=null;
     setState((){
-      filtrado="";
-      index=0;
       paginas=[Login(log: iniciar_sesion,),Register(log: registrar),];
       titulos=["Iniciar Sesión","Registrar"];
-      usuario=null;
-      prefs.remove("id_usuario").then((res)=>print(""));
-      pagina=paginas[0];
       titulo=titulos[0];
     });
   }

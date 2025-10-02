@@ -87,7 +87,8 @@ void error(BuildContext context,String mensaje){
 }
 Widget column(List<Widget> children,{double maxHeight=double.infinity,double ph=10,double pv=0,double spacing=5,bool border_top=false,bool barra=false,bool expand=false}){
   SingleChildScrollView scroll=SingleChildScrollView(child:Column(crossAxisAlignment: CrossAxisAlignment.stretch,mainAxisSize: expand?MainAxisSize.max:MainAxisSize.min,spacing: spacing,children:[SizedBox(height: 0,),...children,SizedBox(height: 0,)],),);
-  return Container(constraints: BoxConstraints(maxHeight: maxHeight),decoration: BoxDecoration(border: border_top?BoxBorder.fromLTRB(top: BorderSide(color: light)):null),padding: EdgeInsets.fromLTRB(ph, pv, ph, pv),child: barra?Scrollbar(thumbVisibility: true,child: scroll):scroll);
+  Container contenedor=Container(constraints: BoxConstraints(maxHeight: maxHeight),decoration: BoxDecoration(border: border_top?BoxBorder.fromLTRB(top: BorderSide(color: light)):null),padding: EdgeInsets.fromLTRB(ph, pv, ph, pv),child: barra?Scrollbar(thumbVisibility: true,child: scroll):scroll);
+  return expand?SizedBox.expand(child:contenedor):contenedor;
 }
 Widget scroller(Widget child,{double maxHeight=double.infinity,double ph=10,double pv=0,bool barra=false}){
   return Container(constraints: BoxConstraints(maxHeight: maxHeight),padding: EdgeInsets.fromLTRB(ph, pv, ph, pv),child: Scrollbar(thumbVisibility: barra,child: SingleChildScrollView(child:child),));
@@ -185,7 +186,7 @@ String getFechaTextoDia(String texto){
   return texto.split(" ")[0];
 }
 String getFechaTextoHora(String texto){
-  return texto.split(" ")[1];
+  return getStrFechaSinSegundos(texto).split(" ")[1];
 }
 Future<List<dynamic>> getLista(String x)async{
   var res=await http.get(Uri.https(url,api+x));
