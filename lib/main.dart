@@ -79,6 +79,9 @@ class _MyWidgetState extends State<MyApp>{
     cerrando=true;
     await prefs.remove("id_usuario");
     setState(() {
+      if (index>0){
+        controlador.jumpToPage(0);
+      }
       index = 0;
       datos_usuario = false;
       filtrado = "";
@@ -110,6 +113,9 @@ class _MyWidgetState extends State<MyApp>{
           controlador.jumpToPage(index);
         }
         else{
+          if (index>0){
+            controlador=PageController(initialPage: index-1);
+          }
           refrescar();
         }
       });
@@ -154,7 +160,7 @@ class _MyWidgetState extends State<MyApp>{
               key: key,
               child:PopScope(canPop: index==0 && !datos_usuario,onPopInvokedWithResult: (b,d){setPagina(titulos[0]);},child: usuario==null?
                 PageView(onPageChanged: (value){setState((){index=value;});},controller: controlador,children:paginas)
-                :datos_usuario?DatosUsuario(usuario:usuario,log: log,):paginas[index])
+                :datos_usuario?DatosUsuario(usuario:usuario,log: log,):index==0?paginas[index]:PageView(onPageChanged: (value){setState((){index=value+1;});},controller: controlador,children:paginas.sublist(1)))
           )
         )
       ),
