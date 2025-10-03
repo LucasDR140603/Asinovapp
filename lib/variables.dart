@@ -176,6 +176,9 @@ String getFechaTexto(String texto){
 DateTime getFecha(String texto){
   return DateTime.parse(getFechaTexto(texto));
 }
+DateTime getFecha0(DateTime fecha){
+  return DateTime(fecha.year,fecha.month,fecha.day);
+}
 String getStrFechaSinSegundos(String texto){
   String amd=texto.split(" ")[0];
   List<String> hms=texto.split(" ")[1].split(":");
@@ -187,6 +190,9 @@ String getFechaTextoDia(String texto){
 }
 String getFechaTextoHora(String texto){
   return getStrFechaSinSegundos(texto).split(" ")[1];
+}
+String getHora(DateTime fecha){
+  return '${fecha.hour.toString().padLeft(2,"0")}:${fecha.minute.toString().padLeft(2,"0")}';
 }
 Future<List<dynamic>> getLista(String x)async{
   var res=await http.get(Uri.https(url,api+x));

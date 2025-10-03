@@ -96,8 +96,8 @@ class _MyWidgetState extends State<Registros> {
     return x['fin']!=null;
   }
   bool dentro_intervalo(dynamic x){
-    DateTime f=getFecha(x['fin']);
-    return inicio.compareTo(getFecha(x['inicio']))<=0 && fin.compareTo(DateTime(f.year,f.month,f.day))>=0;
+    DateTime f=getFecha(x['inicio']);
+    return inicio.compareTo(f)<=0 && fin.compareTo(getFecha0(f))>=0;
   }
   bool contieneGastos(dynamic x){
     bool g=false;
@@ -210,8 +210,8 @@ class _MyWidgetState extends State<Registros> {
       "id_proyecto":hay_registros?registros[0]['id_proyecto']:proyectos[0]['id'],
       "usuario":usuario['nick'],
       "id_usuario":usuario['id'],
-      "inicio": "${inicio.day.toString().padLeft(2,"0")}/${inicio.month.toString().padLeft(2,"0")}/${inicio.year} ${actual.hour.toString().padLeft(2,"0")}:${actual.minute.toString().padLeft(2,"0")}",
-      "fin":inicio.day<actual.day?"${inicio.day.toString().padLeft(2,"0")}/${inicio.month.toString().padLeft(2,"0")}/${inicio.year} ${actual.hour.toString().padLeft(2,"0")}:${actual.minute.toString().padLeft(2,"0")}":null,
+      "inicio": "${inicio.day.toString().padLeft(2,"0")}/${inicio.month.toString().padLeft(2,"0")}/${inicio.year} ${inicio.compareTo(getFecha0(actual))<0 && registros.where((x)=>getFecha0(getFecha(x['inicio']))==inicio && x['fin']!=null).toList().isNotEmpty?getHora(getFecha(registros.where((x)=>getFecha0(getFecha(x['inicio']))==inicio && x['fin']!=null).toList()[0]['fin'])):getHora(actual)}",
+      "fin":inicio.compareTo(getFecha0(actual))<0?"${inicio.day.toString().padLeft(2,"0")}/${inicio.month.toString().padLeft(2,"0")}/${inicio.year} ${registros.where((x)=>getFecha0(getFecha(x['inicio']))==inicio && x['fin']!=null).toList().isNotEmpty?getHora(getFecha(registros.where((x)=>getFecha0(getFecha(x['inicio']))==inicio && x['fin']!=null).toList()[0]['fin'])):getHora(actual)}":null,
       "descripcion":null,
       "observaciones":null,
     };
