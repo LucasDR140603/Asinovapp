@@ -103,8 +103,8 @@ class _MyWidgetState extends State<MyApp>{
   
   @override
   Widget build(BuildContext context) {
-    List<Widget> paginas=usuario==null?[Login(log: iniciar_sesion,),Register(log: registrar),]:[Registros(usuario: usuario,),Proyectos(usuario:usuario,filtrado: (s){setState((){filtrado=s;});},),Centros(filtrado: (s){setState((){filtrado=s;});},),Clientes(filtrado:(s){setState((){filtrado=s;});})];
-    List<String> titulos=usuario==null?["Iniciar Sesión","Registrar"]:["Registros","Proyectos","Centros","Clientes"];
+    List<Widget> paginas=usuario==null?[Login(log: iniciar_sesion,),Register(log: registrar),]:[Registros(usuario: usuario,),Proyectos(usuario:usuario,filtrado: (s){setState((){filtrado=s;});},),if(usuario['administrador'])...[Centros(filtrado: (s){setState((){filtrado=s;});},),Clientes(filtrado:(s){setState((){filtrado=s;});})]];
+    List<String> titulos=usuario==null?["Iniciar Sesión","Registrar"]:["Registros","Proyectos",if(usuario['administrador'])...["Centros","Clientes"]];
     void setPagina(String value){
       setState((){
         datos_usuario=value==titulo_datos_usuario;

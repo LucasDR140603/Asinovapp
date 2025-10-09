@@ -9,14 +9,16 @@ class AddEditProyecto extends StatefulWidget {
   final List<dynamic>? clientes;
   final List<dynamic>? centros;
   final dynamic proyecto;
+  final dynamic usuario;
   final Function(dynamic)? guardar;
   final Function(List<dynamic>,List<dynamic>)? guardar2;
-  const AddEditProyecto({super.key,this.clientes,this.centros,this.proyecto,this.guardar,this.guardar2});
+  const AddEditProyecto({super.key,this.clientes,this.centros,this.proyecto,this.usuario,this.guardar,this.guardar2});
   @override
   State<AddEditProyecto> createState() => _MyWidgetState();
 }
 
 class _MyWidgetState extends State<AddEditProyecto> {
+  late dynamic usuario=widget.usuario!;
   late List<dynamic> clientes=widget.clientes!;
   late List<dynamic> centros=widget.centros!;
   late Function(dynamic) guardar=widget.guardar!;
@@ -171,9 +173,9 @@ class _MyWidgetState extends State<AddEditProyecto> {
             column(maxHeight: 200,barra: true,List<Widget>.from(lista.where((x)=>x['nombre'].toString().contains(busqueda)).map((x)=>
               RadioMenuButton(value: x,groupValue: actual,onChanged: (val){f(val);Navigator.of(context).pop();},child: Text(x['nombre'])),
             ))),
-            if (title=="Seleccionar Cliente")
+            if (usuario['administrador'] && title=="Seleccionar Cliente")
             ElevatedButton(onPressed: (){addCliente();}, child: Text("Añadir Cliente")),
-            if (title=="Seleccionar Centro")
+            if (usuario['administrador'] && title=="Seleccionar Centro")
             ElevatedButton(onPressed: (){addCentro(cliente['id']);}, child: Text("Añadir Centro")),
           ]),
         );

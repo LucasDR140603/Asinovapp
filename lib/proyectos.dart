@@ -197,7 +197,7 @@ class _MyWidgetState extends State<Proyectos> {
     showDialog(barrierDismissible: false,context: context, builder: (BuildContext context){
       return AlertDialog(
         title: Text("Editar ${x['nombre']}"),
-        content: AddEditProyecto(clientes: clientes,centros: centros,proyecto:x,guardar: guardar,guardar2: guardar2,),
+        content: AddEditProyecto(clientes: clientes,centros: centros,proyecto:x,usuario:usuario,guardar: guardar,guardar2: guardar2,),
       );
     });
   }
@@ -214,7 +214,7 @@ class _MyWidgetState extends State<Proyectos> {
     showDialog(barrierDismissible: false,context: context, builder: (BuildContext context){
       return AlertDialog(
         title: Text("Añadir Proyecto"),
-        content: AddEditProyecto(clientes: clientes,centros: centros,proyecto:nuevo,guardar: guardar_nuevo,guardar2: guardar2,),
+        content: AddEditProyecto(clientes: clientes,centros: centros,proyecto:nuevo,usuario:usuario,guardar: guardar_nuevo,guardar2: guardar2,),
       );
     });
   }
@@ -265,9 +265,11 @@ class _MyWidgetState extends State<Proyectos> {
         return AlertDialog(
           content: column([
           ListTile(title: Text(terminado(x)?"Iniciar":"Terminar"),onTap: (){Navigator.of(context).pop();terminado(x)?iniciar(x):terminar(x);},),
+          if(usuario['administrador'])
+          ...[
           ListTile(title: Text("Editar"),onTap:(){Navigator.of(context).pop();edit(x);}),
           ListTile(title: Text("Finalizar"),onTap:(){Navigator.of(context).pop();finalizar(x);}),
-          ListTile(title: Text("Eliminar"),onTap:(){Navigator.of(context).pop();eliminar(x);})
+          ListTile(title: Text("Eliminar"),onTap:(){Navigator.of(context).pop();eliminar(x);})]
         ]),
         );
       }).then((res)=>{
